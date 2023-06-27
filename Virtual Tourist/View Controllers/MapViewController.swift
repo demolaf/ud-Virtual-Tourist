@@ -139,7 +139,7 @@ extension MapViewController: MKMapViewDelegate {
         let photoAlbumVC = storyboard?.instantiateViewController(withIdentifier: "PhotoAlbumViewController") as! PhotoAlbumViewController
         
         photoAlbumVC.selectedAnnotation = annotation as? PinAnnotation
-        photoAlbumVC.annotations = mapView.annotations
+        photoAlbumVC.annotations = mapView.annotations as! [PinAnnotation]
         photoAlbumVC.dataController = dataController
         
         navigationController?.pushViewController(photoAlbumVC, animated: true)

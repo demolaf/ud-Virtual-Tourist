@@ -90,53 +90,96 @@
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="BUr-j8-6Ne">
-                                                    <rect key="frame" x="0.0" y="1.6666666666666572" width="128" height="125"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BUr-j8-6Ne">
+                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="125" id="7qW-Y6-khU"/>
                                                         <constraint firstAttribute="width" constant="125" id="JHB-x0-MTZ"/>
                                                     </constraints>
                                                 </imageView>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="Hp5-bf-OSc">
+                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="Hp5-bf-OSc" secondAttribute="bottom" id="2Zz-xs-7mB"/>
+                                                <constraint firstItem="Hp5-bf-OSc" firstAttribute="top" secondItem="EFV-hw-JIu" secondAttribute="top" id="I8y-Fa-Iaf"/>
                                                 <constraint firstItem="BUr-j8-6Ne" firstAttribute="leading" secondItem="EFV-hw-JIu" secondAttribute="leading" id="OHL-1f-opw"/>
                                                 <constraint firstItem="BUr-j8-6Ne" firstAttribute="top" secondItem="EFV-hw-JIu" secondAttribute="top" id="Xmu-xO-yCm"/>
                                                 <constraint firstAttribute="bottom" secondItem="BUr-j8-6Ne" secondAttribute="bottom" id="gtR-Bb-Dfw"/>
+                                                <constraint firstAttribute="trailing" secondItem="Hp5-bf-OSc" secondAttribute="trailing" id="l6L-h6-JF3"/>
+                                                <constraint firstItem="Hp5-bf-OSc" firstAttribute="leading" secondItem="EFV-hw-JIu" secondAttribute="leading" id="lV8-H6-Tfi"/>
                                                 <constraint firstAttribute="trailing" secondItem="BUr-j8-6Ne" secondAttribute="trailing" id="xTu-Jw-ue8"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <connections>
                                             <outlet property="imageView" destination="BUr-j8-6Ne" id="oWB-Df-deD"/>
+                                            <outlet property="loadingActivityView" destination="Hp5-bf-OSc" id="Z4D-YI-cHJ"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CDB-Vb-GGZ" userLabel="Loading Indicator">
+                                <rect key="frame" x="0.0" y="259" width="393" height="559"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="eVi-hs-MD7">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="559"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="sx3-i6-P9z">
+                                                <rect key="frame" x="0.0" y="245.00000000000003" width="393" height="69.333333333333343"/>
+                                                <subviews>
+                                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="1sA-H9-TTK">
+                                                        <rect key="frame" x="178" y="0.0" width="37" height="37"/>
+                                                    </activityIndicatorView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fetching Images" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4id-XO-a8s">
+                                                        <rect key="frame" x="133.66666666666666" y="49" width="125.66666666666666" height="20.333333333333329"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="eVi-hs-MD7" firstAttribute="leading" secondItem="CDB-Vb-GGZ" secondAttribute="leading" id="W5H-K4-eCH"/>
+                                    <constraint firstAttribute="bottom" secondItem="eVi-hs-MD7" secondAttribute="bottom" id="Wox-Di-00I"/>
+                                    <constraint firstAttribute="trailing" secondItem="eVi-hs-MD7" secondAttribute="trailing" id="dEJ-Wt-n5s"/>
+                                    <constraint firstItem="eVi-hs-MD7" firstAttribute="top" secondItem="CDB-Vb-GGZ" secondAttribute="top" id="icP-FM-Ddw"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="S1g-VP-NLa"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="NDR-I4-jTS" firstAttribute="leading" secondItem="S1g-VP-NLa" secondAttribute="leading" id="85U-92-jjk"/>
                             <constraint firstItem="S1g-VP-NLa" firstAttribute="trailing" secondItem="lwX-ym-htf" secondAttribute="trailing" id="8Fw-kh-JKP"/>
+                            <constraint firstItem="CDB-Vb-GGZ" firstAttribute="leading" secondItem="S1g-VP-NLa" secondAttribute="leading" id="DPf-Aa-Gbp"/>
                             <constraint firstItem="NDR-I4-jTS" firstAttribute="top" secondItem="S1g-VP-NLa" secondAttribute="top" id="MbQ-9v-WHQ"/>
                             <constraint firstItem="lwX-ym-htf" firstAttribute="top" secondItem="NDR-I4-jTS" secondAttribute="bottom" constant="12" id="ZDi-l1-dM8"/>
                             <constraint firstItem="S1g-VP-NLa" firstAttribute="trailing" secondItem="NDR-I4-jTS" secondAttribute="trailing" id="dk3-Kd-Fcv"/>
                             <constraint firstItem="lwX-ym-htf" firstAttribute="leading" secondItem="S1g-VP-NLa" secondAttribute="leading" id="fts-yG-XoY"/>
+                            <constraint firstItem="CDB-Vb-GGZ" firstAttribute="trailing" secondItem="S1g-VP-NLa" secondAttribute="trailing" id="iXf-uf-Q3n"/>
+                            <constraint firstItem="S1g-VP-NLa" firstAttribute="bottom" secondItem="CDB-Vb-GGZ" secondAttribute="bottom" id="oSg-Wz-Gfi"/>
+                            <constraint firstItem="CDB-Vb-GGZ" firstAttribute="top" secondItem="NDR-I4-jTS" secondAttribute="bottom" id="sFf-9n-3l3"/>
                             <constraint firstItem="S1g-VP-NLa" firstAttribute="bottom" secondItem="lwX-ym-htf" secondAttribute="bottom" id="zVl-NF-u1s"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="CDR-ld-NSg"/>
                     <connections>
+                        <outlet property="collectionLoadingActivity" destination="CDB-Vb-GGZ" id="E9Y-ln-tBX"/>
                         <outlet property="collectionView" destination="lwX-ym-htf" id="Pde-Ei-op3"/>
                         <outlet property="mapView" destination="NDR-I4-jTS" id="Q3u-hC-fzV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V59-i6-cOx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7" y="-25"/>
+            <point key="canvasLocation" x="6.8702290076335872" y="-25.35211267605634"/>
         </scene>
     </scenes>
     <resources>
-        <image name="photo.fill" catalog="system" width="128" height="93"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -32,13 +32,12 @@ class NetworkClient {
         }
     }
     
-    func getImage(url: URL, completion: @escaping (UIImage?, Data?) -> Void) -> URLSessionTask {
+    func getImage(url: URL, completion: @escaping (Data?) -> Void) -> URLSessionTask {
         return get(url: url, response: Data.self, skipDecoding: true) { response, error in
             if let data = response as? Data {
-                let image = UIImage(data: data)
-                completion(image, data)
+                completion(data)
             } else {
-                completion(nil, nil)
+                completion(nil)
             }
         }
     }

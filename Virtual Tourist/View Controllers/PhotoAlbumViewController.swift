@@ -13,6 +13,7 @@ class PhotoAlbumViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var collectionLoadingActivity: UIView!
     
     lazy var networkClient = NetworkClient()
     
@@ -22,9 +23,11 @@ class PhotoAlbumViewController: UIViewController {
     
     var selectedAnnotation: PinAnnotation!
     
-    var annotations = [MKAnnotation]()
+    var annotations = [PinAnnotation]()
     
     var photos = [Photo]()
+    
+    var photosURL = [URL]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,6 +63,7 @@ class PhotoAlbumViewController: UIViewController {
     @objc private func onNewCollectionTabBarButtonPressed() {
         selectedAnnotation.pin.currentPage += 1
         photos.removeAll()
+        photosURL.removeAll()
         
         fetchedResultsController.fetchedObjects?.forEach({ photo in
             dataController.viewContext.delete(photo)
@@ -85,30 +89,21 @@ class PhotoAlbumViewController: UIViewController {
     }
     
     private func initializePhotosList() {
-        let _ = networkClient.getPhotosForLocation(lat: selectedAnnotation.coordinate.latitude, lon: selectedAnnotation.coordinate.longitude, page: Int(selectedAnnotation.pin.currentPage)) { photos, error in
-            //            if let _ = error {
-            //                self.showUIAlertView(title: "Fetch Failed", message: "Error fetching student locations")
-            //
-            //                return
-            //            }
-            print("Fetched images from remote \(photos)")
+        self.collectionLoadingActivity.isHidden = false
+        let _ = networkClient.getPhotosForLocation(lat: selectedAnnotation.coordinate.latitude, lon: selectedAnnotation.coordinate.longitude, page: Int(selectedAnnotation.pin.currentPage)) { photosURL, error in
+            print("Fetched images from remote \(photosURL)")
             
-            photos.forEach { url in
-                let _ = self.networkClient.getImage(url: url) { image, data in
-                    let photo = Photo(context: self.dataController.viewContext)
-                    photo.image = data
-                    photo.pin = self.selectedAnnotation.pin
-                    try? self.dataController.viewContext.save()
-                    
-                    self.photos.append(photo)
-                    
-                    self.collectionView.reloadData()
-                }
-            }
+            self.photosURL = photosURL
+            
+            self.collectionLoadingActivity.isHidden = true
+            
+            self.collectionView.reloadData()
         }
     }
     
     fileprivate func setupFetchedResultsController() {
+        self.collectionLoadingActivity.isHidden = true
+        
         let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
         
         let predicate = NSPredicate(format: "pin == %@", selectedAnnotation.pin)
@@ -129,6 +124,7 @@ class PhotoAlbumViewController: UIViewController {
             } else {
                 print("Fetching images from local \(String(describing: fetchedResultsController.fetchedObjects))")
                 photos = fetchedResultsController.fetchedObjects!
+                print("Photos count \(photos.count)")
             }
             
         } catch {
@@ -153,13 +149,32 @@ class PhotoAlbumViewController: UIViewController {
 extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photos.count
+        return photosURL.isEmpty ? photos.count : photosURL.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as! ImageCollectionViewCell
         
-        cell.imageView.image = UIImage(data: photos[indexPath.row].image!)
+        cell.loadingActivityView.startAnimating()
+        
+        if photosURL.isEmpty, let imageData = photos[indexPath.row].image {
+            cell.imageView.image = UIImage(data: imageData)
+            cell.loadingActivityView.stopAnimating()
+        } else {
+            let url = photosURL[indexPath.row]
+            let _ = self.networkClient.getImage(url: url) { data in
+                if let data = data {
+                    cell.imageView.image = UIImage(data: data)
+                }
+                cell.loadingActivityView.stopAnimating()
+                
+                // Save to local storage
+                let photo = Photo(context: self.dataController.viewContext)
+                photo.image = data
+                photo.pin = self.selectedAnnotation.pin
+                try? self.dataController.viewContext.save()
+            }
+        }
         
         return cell
     }
